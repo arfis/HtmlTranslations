@@ -1,16 +1,15 @@
-import {AfterViewChecked, Directive, ElementRef, Input, OnInit} from '@angular/core';
+import {AfterViewChecked, Directive, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 @Directive({
   selector: '[appElementTranslate]'
 })
-export class ElementTranslateDirective implements AfterViewChecked, OnInit {
+export class ElementTranslateDirective implements AfterViewChecked, OnInit, OnDestroy {
 
-  @Input('selector') selector;
-  @Input('method') method;
-  @Input('event') event;
+  @Input('elementTranslateSettings') elementTranslateSettings: TranslateSelectorModel[];
 
   wasEventAdded = false;
+  translateSubscription;
 
   constructor(private element: ElementRef,
               private translateService: TranslateService) {
@@ -18,7 +17,7 @@ export class ElementTranslateDirective implements AfterViewChecked, OnInit {
 
 
   ngOnInit(): void {
-    this.translateService.onLangChange.subscribe(
+    this.translateSubscription = this.translateService.onLangChange.subscribe(
       () => this.wasEventAdded = false
     );
   }
@@ -30,10 +29,17 @@ export class ElementTranslateDirective implements AfterViewChecked, OnInit {
   }
 
   setupListeners() {
-    const elementFoundBySelector = this.element.nativeElement.querySelector(this.selector);
-    if (elementFoundBySelector) {
-      this.wasEventAdded = true;
-      elementFoundBySelector.addEventListener(this.event, this.method);
+    for (const elementTranslateSetting of this.elementTranslateSettings) {
+      const {selector, method, event} = elementTranslateSetting;
+      const elementFoundBySelector = this.element.nativeElement.querySelector(selector);
+      if (elementFoundBySelector) {
+        this.wasEventAdded = true;
+        elementFoundBySelector.addEventListener(event, method);
+      }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.translateSubscription.unsubscribe();
   }
 }

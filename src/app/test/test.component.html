@@ -1,5 +1,15 @@
 <p appElementTranslate
    [innerHTML]="'welcome' | translate"
-   [selector]="'a'"
-   [event]="'click'"
-   [method]="click"></p>
+   [elementTranslateSettings]="[
+      {
+        selector:'a',
+        event: 'click',
+        method:click
+      },
+      {
+        selector: 'span',
+        event: 'mouseover',
+        method: mouseOverSpan
+      }
+    ]"
+></p>
