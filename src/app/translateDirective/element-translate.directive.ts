@@ -1,24 +1,39 @@
-import {AfterViewChecked, Directive, ElementRef, Input} from '@angular/core';
+import {AfterViewChecked, Directive, ElementRef, Input, OnInit} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Directive({
   selector: '[appElementTranslate]'
 })
-export class ElementTranslateDirective implements AfterViewChecked{
+export class ElementTranslateDirective implements AfterViewChecked, OnInit {
 
-  @Input('key') key;
   @Input('selector') selector;
   @Input('method') method;
   @Input('event') event;
 
   wasEventAdded = false;
 
-  constructor(private element: ElementRef) { }
+  constructor(private element: ElementRef,
+              private translateService: TranslateService) {
+  }
+
+
+  ngOnInit(): void {
+    this.translateService.onLangChange.subscribe(
+      () => this.wasEventAdded = false
+    );
+  }
 
   ngAfterViewChecked() {
-    const anchor = this.element.nativeElement.querySelector(this.selector);
-    if (anchor && !this.wasEventAdded) {
+    if (!this.wasEventAdded) {
+      this.setupListeners();
+    }
+  }
+
+  setupListeners() {
+    const elementFoundBySelector = this.element.nativeElement.querySelector(this.selector);
+    if (elementFoundBySelector) {
       this.wasEventAdded = true;
-      anchor.addEventListener(this.event, this.method);
+      elementFoundBySelector.addEventListener(this.event, this.method);
     }
   }
 }

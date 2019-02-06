@@ -9,7 +9,7 @@ import {TranslateService} from '@ngx-translate/core';
 export class AppComponent {
   title = 'my-playground';
 
-  constructor(translate: TranslateService) {
+  constructor(private translate: TranslateService) {
     // this language will be used as a fallback when a translation isn't found in the current language
     translate.setDefaultLang('en');
 
@@ -17,7 +17,7 @@ export class AppComponent {
     translate.use('en');
   }
 
-  click() {
-    console.log('testing click');
+  switchToLanguage(language) {
+    this.translate.use(language);
   }
 }
