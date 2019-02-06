@@ -7,9 +7,9 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { TranslatorComponent } from './translator/translator.component';
 import { ElementTranslateDirective } from './translateDirective/element-translate.directive';
 import { TestComponent } from './test/test.component';
+import { CustomAnchorComponent } from './custom-anchor/custom-anchor.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -19,7 +19,8 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     ElementTranslateDirective,
-    TestComponent
+    TestComponent,
+    CustomAnchorComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +35,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     })
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    CustomAnchorComponent
+  ]
 })
 export class AppModule { }

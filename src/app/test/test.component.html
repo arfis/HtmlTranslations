@@ -4,7 +4,7 @@
       {
         selector:'a',
         event: 'click',
-        method:click
+        method: click
       },
       {
         selector: 'span',
@@ -13,3 +13,18 @@
       }
     ]"
 ></p>
+
+<div
+  appElementTranslate
+  [elementTranslateSettings]="[
+      {
+        customComponentString: 'customAnchor',
+        selector:'app-custom-anchor',
+        event: 'customClick',
+        method: customClick,
+        componentType: customAnchorComponent
+      }
+      ]"
+>
+</div>
+

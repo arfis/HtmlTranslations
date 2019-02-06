@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {CustomAnchorComponent} from '../custom-anchor/custom-anchor.component';
 
 @Component({
   selector: 'app-test',
@@ -13,5 +14,13 @@ export class TestComponent {
 
   mouseOverSpan() {
     console.log('mouse over span');
+  }
+
+  get customAnchorComponent() {
+    return CustomAnchorComponent;
+  }
+
+  customClick() {
+    console.log('custom click');
   }
 }
