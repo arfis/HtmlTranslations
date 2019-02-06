@@ -1,16 +1,14 @@
 import {
   AfterViewChecked,
-  ComponentFactory,
   ComponentFactoryResolver,
   Directive,
   ElementRef,
-  Input, NgZone,
+  Input,
   OnDestroy,
   OnInit,
   Renderer2, ViewContainerRef
 } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {CustomAnchorComponent} from '../custom-anchor/custom-anchor.component';
 
 @Directive({
   selector: '[appElementTranslate]'
@@ -51,24 +49,26 @@ export class ElementTranslateDirective implements AfterViewChecked, OnInit, OnDe
     return created;
   }
 
-  parseString(value: string, event, method) {
+  parseHtmlString(translation: string) {
     const parser = new DOMParser();
-    const parsedHtml = parser.parseFromString(value, 'text/html');
+    const parsedHtml = parser.parseFromString(translation, 'text/html');
     const allnodes = parsedHtml.getElementsByTagName('*');
     const foundComponents = [];
 
+    // 2 is because the DOMParser creates also the body and Html tag
+    // needs improvement
     for (let i = allnodes.length - 1; i > 2; i--) {
       foundComponents.push(allnodes.item(i));
-      console.log(foundComponents);
     }
     return foundComponents;
   }
 
   setupTranslationElements() {
-
+    // setting up translations and listeners for the html elements from the translation file
     for (const elementTranslateSetting of this.elementTranslateSettings) {
       const {customComponentString} = elementTranslateSetting;
 
+      // for now it renders either custom components, or ordinary html components
       if (customComponentString) {
         this.setupCustomComponents(elementTranslateSetting);
       } else {
@@ -78,7 +78,6 @@ export class ElementTranslateDirective implements AfterViewChecked, OnInit, OnDe
   }
 
   setupOrdinaryComponents(elementTranslateSetting) {
-
     const {selector, method, event} = elementTranslateSetting;
     const elementFoundBySelector = this.element.nativeElement.querySelector(selector);
     if (elementFoundBySelector) {
@@ -88,12 +87,15 @@ export class ElementTranslateDirective implements AfterViewChecked, OnInit, OnDe
   }
 
   setupCustomComponents(elementTranslateSetting) {
+    // custom components are not working so properly, at the moment they
+    // are just being rendered without taking iny other info from the translation
     const {method, event, customComponentString, componentType} = elementTranslateSetting;
     const translatedString = this.translateService.instant(customComponentString);
-    const foundComponents = this.parseString(translatedString, event, method);
+    const foundComponents = this.parseHtmlString(translatedString, event, method);
 
     this.container.clear();
     for (const component of foundComponents) {
+      // the part where are the components created
       const componentInstance = this.createComponent(componentType, component.innerText);
       const componentRef = componentInstance.location.nativeElement;
       this.addListener(componentRef, event, method);

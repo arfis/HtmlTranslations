@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Output} from '@angular/core';
 
 @Component({
   selector: 'app-custom-anchor',
@@ -8,13 +8,16 @@ import {Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output
 export class CustomAnchorComponent {
 
   @Output('customClick') onCustomClickEmitter = new EventEmitter();
-  @Input('value') value;
 
-  customEvent = new CustomEvent('customClick', { bubbles: true });
+  customEvent = new CustomEvent('customClick', {bubbles: true});
 
-  constructor(private element: ElementRef) {}
+  constructor(private element: ElementRef) {
+  }
+
+
   onCustomClick($event) {
     this.onCustomClickEmitter.next();
+    // workaround so the renderer invokes when the action is called
     this.element.nativeElement.dispatchEvent(this.customEvent);
   }
 
