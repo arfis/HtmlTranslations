@@ -1,0 +1,3 @@
+{
+  "welcome": "Welcome in <a class='red' (click)={{method()}}>this</a> app {{name}}"
+}
