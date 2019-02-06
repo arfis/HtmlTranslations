@@ -1,7 +1,5 @@
-<app-translator
-  [key]="'welcome'"
-  [event]="'click'"
-  [params]="{
-    name: 'Viktor Vysoky',
-    method: click
-    }"></app-translator>
+<p appElementTranslate
+   [innerHTML]="'welcome' | translate"
+   [event]="'hover'"
+   [selector]="'a'"
+   [method]="click"></p>

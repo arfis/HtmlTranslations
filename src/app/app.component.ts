@@ -18,6 +18,6 @@ export class AppComponent {
   }
 
   click() {
-      console.log('testing click');
+    console.log('testing click');
   }
 }

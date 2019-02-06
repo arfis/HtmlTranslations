@@ -7,9 +7,8 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { TranslateDirectiveDirective } from './translate-directive/translate-directive.directive';
-import { TestComponent } from './test/test.component';
 import { TranslatorComponent } from './translator/translator.component';
+import { ElementTranslateDirective } from './translateDirective/element-translate.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -18,9 +17,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    TranslateDirectiveDirective,
-    TestComponent,
-    TranslatorComponent
+    TranslatorComponent,
+    ElementTranslateDirective
   ],
   imports: [
     BrowserModule,
