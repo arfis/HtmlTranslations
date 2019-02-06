@@ -1,4 +1,4 @@
-import {AfterViewChecked, Directive, ElementRef, Input, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewChecked, Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 @Directive({
@@ -12,6 +12,7 @@ export class ElementTranslateDirective implements AfterViewChecked, OnInit, OnDe
   translateSubscription;
 
   constructor(private element: ElementRef,
+              private renderer: Renderer2,
               private translateService: TranslateService) {
   }
 
@@ -34,7 +35,7 @@ export class ElementTranslateDirective implements AfterViewChecked, OnInit, OnDe
       const elementFoundBySelector = this.element.nativeElement.querySelector(selector);
       if (elementFoundBySelector) {
         this.wasEventAdded = true;
-        elementFoundBySelector.addEventListener(event, method);
+        this.renderer.listen(elementFoundBySelector, event, method);
       }
     }
   }
